@@ -22,6 +22,7 @@ namespace ConferenceApp
 		AudioRecorderService _recorder = new AudioRecorderService
 		{
 			StopRecordingOnSilence = true,
+			AudioSilenceTimeout = TimeSpan.FromSeconds(1),
 			StopRecordingAfterTimeout = true,
 			TotalAudioTimeout = TimeSpan.FromSeconds(3)
 		};
@@ -45,7 +46,7 @@ namespace ConferenceApp
 		{
 			if (!_recorder.IsRecording)
 			{
-				btnRecord.Text = "Stop recording";
+				btnRecord.Text = "Stop";
 
 				Task<string> audioRecordTask;
 				try
@@ -58,32 +59,39 @@ namespace ConferenceApp
 					throw;
 				}
 
-				using (var stream = _recorder.GetAudioFileStream())
-				{
-					//this will begin sending the recording audio data as it continues to record
-					var simpleResult = await _bingSpeechClient.SpeechToTextSimple(
-						stream,
-						_recorder.AudioStreamDetails.SampleRate,
-						audioRecordTask);
+				var filename = await audioRecordTask;
+				btnRecord.Text = "Start";
 
-					if (simpleResult.RecognitionStatus == RecognitionStatus.Success)
+				if (filename != null)
+				{
+					var recognitionResult = await _bingSpeechClient.SpeechToTextSimple(filename);
+					if (recognitionResult.RecognitionStatus == RecognitionStatus.Success)
 					{
-						txtRecognized.Text += simpleResult.DisplayText;
+						txtRecognized.Text += recognitionResult.DisplayText;
 					}
+					else
+					{
+						Debug.WriteLine("Failed to process speech: " + recognitionResult.RecognitionStatus);
+					}
+				}
+				else
+				{
+					throw new InvalidOperationException("No audio file stored!");
 				}
 			}
 			else
 			{
-				btnRecord.Text = "Start recording";
 				try
 				{
 					await _recorder.StopRecording();
+
 				}
 				catch (Exception)
 				{
 					Debug.WriteLine("Stopping recording failed.");
 					throw;
 				}
+				btnRecord.Text = "Start";
 			}
 
 
