@@ -6,7 +6,6 @@ namespace Plugin.AudioRecorder
     {
         partial void Init()
         {
-            filePath = Path.Combine(Path.GetTempPath(), RecordingFileName);
         }
     }
 }

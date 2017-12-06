@@ -2,6 +2,8 @@
 using System.Threading.Tasks;
 using Xamarin.Forms;
 using Plugin.AudioRecorder;
+using System.IO;
+using System.Diagnostics;
 
 namespace AudioRecord.Forms
 {
@@ -44,7 +46,9 @@ namespace AudioRecord.Forms
 					PlayButton.IsEnabled = false;
 
 					//start recording audio
-					var audioRecordTask = await recorder.StartRecording ();
+					var filename = Path.Combine(Path.GetTempPath(), "1.wav");
+					var audioRecordTask = await recorder.StartRecording (filename);
+					Debug.WriteLine(filename);
 
 					RecordButton.Text = "Stop Recording";
 					RecordButton.IsEnabled = true;
@@ -59,7 +63,8 @@ namespace AudioRecord.Forms
 					RecordButton.IsEnabled = false;
 
 					//stop the recording...
-					await recorder.StopRecording ();
+					_recordedFileLocation = await recorder.StopRecording ();
+					Debug.WriteLine("Recorded to: " + _recordedFileLocation);
 
 					RecordButton.IsEnabled = true;
 				}
@@ -70,6 +75,8 @@ namespace AudioRecord.Forms
 				throw ex;
 			}
 		}
+
+		string _recordedFileLocation;
 
 
 		void Play_Clicked (object sender, EventArgs e)
@@ -82,7 +89,7 @@ namespace AudioRecord.Forms
 		{
 			try
 			{
-				var filePath = recorder.GetAudioFilePath ();
+				var filePath = _recordedFileLocation;
 
 				if (filePath != null)
 				{

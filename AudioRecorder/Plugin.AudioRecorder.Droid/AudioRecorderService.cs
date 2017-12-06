@@ -9,8 +9,6 @@ namespace Plugin.AudioRecorder
 	{
 		partial void Init ()
 		{
-			filePath = Path.Combine (Path.GetTempPath (), RecordingFileName);
-
 			if (Android.OS.Build.VERSION.SdkInt > Android.OS.BuildVersionCodes.JellyBean)
 			{
 				try

@@ -9,13 +9,10 @@ namespace Plugin.AudioRecorder
 	/// </summary>
 	public partial class AudioRecorderService
 	{
-		const string RecordingFileName = "ARS_recording.wav";
-
 		WaveRecorder recorder;
 		IAudioStream audioStream;
 
 		bool audioDetected;
-		string filePath;
 		DateTime? silenceTime;
 		DateTime? startTime;
 		TaskCompletionSource<string> recordTask;
@@ -101,13 +98,14 @@ namespace Plugin.AudioRecorder
 		/// </summary>
 		/// <returns>A <see cref="Task"/> that will complete when recording is finished.  
 		/// The task result will be the path to the recorded audio file, or null if no audio was recorded.</returns>
-		public async Task<Task<string>> StartRecording ()
+		public async Task<Task<string>> StartRecording (string filePath)
 		{
 			ResetAudioDetection ();
 
 			InitializeStream (PreferredSampleRate);
 
 			await recorder.StartRecorder (audioStream, filePath);
+			_filePath = filePath;
 
 			AudioStreamDetails = new AudioStreamDetails
 			{
@@ -123,6 +121,8 @@ namespace Plugin.AudioRecorder
 
 			return recordTask.Task;
 		}
+
+		string _filePath;
 
 
 		/// <summary>
@@ -206,7 +206,7 @@ namespace Plugin.AudioRecorder
 		/// </summary>
 		/// <param name="continueProcessing"><c>true</c> (default) to finish recording and raise the <see cref="AudioInputReceived"/> event. 
 		/// Use <c>false</c> here to stop recording but do nothing further (from an error state, etc.).</param>
-		public async Task StopRecording (bool continueProcessing = true)
+		public async Task<string> StopRecording (bool continueProcessing = true)
 		{
 			audioStream.OnBroadcast -= AudioStream_OnBroadcast;
 
@@ -220,7 +220,7 @@ namespace Plugin.AudioRecorder
 				System.Diagnostics.Debug.WriteLine ("Error in StopRecording: {0}", ex);
 			}
 
-			var returnedFilePath = GetAudioFilePath ();
+			var returnedFilePath = _filePath;
 			//complete the recording Task for anthing waiting on this
 			recordTask.TrySetResult (returnedFilePath);
 
@@ -230,6 +230,8 @@ namespace Plugin.AudioRecorder
 
 				AudioInputReceived?.Invoke (this, returnedFilePath);
 			}
+
+			return _filePath;
 		}
 
 
@@ -257,16 +259,6 @@ namespace Plugin.AudioRecorder
 			{
 				System.Diagnostics.Debug.WriteLine ("Error: {0}", ex);
 			}
-		}
-
-
-		/// <summary>
-		/// Gets the full filepath to the recorded audio file.
-		/// </summary>
-		/// <returns>The full filepath to the recorded audio file, or null if no audio was detected during the last record.</returns>
-		public string GetAudioFilePath ()
-		{
-			return audioDetected ? filePath : null;
 		}
 	}
 }
