@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using Xamarin.Cognitive.BingSpeech;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using System.IO;
+using System.Threading;
 
 namespace ConferenceApp
 {
@@ -22,9 +24,9 @@ namespace ConferenceApp
 		AudioRecorderService _recorder = new AudioRecorderService
 		{
 			StopRecordingOnSilence = true,
-			AudioSilenceTimeout = TimeSpan.FromSeconds(1),
+			AudioSilenceTimeout = TimeSpan.FromSeconds(2),
 			StopRecordingAfterTimeout = true,
-			TotalAudioTimeout = TimeSpan.FromSeconds(3)
+			TotalAudioTimeout = TimeSpan.FromSeconds(30)
 		};
 
 		BingSpeechApiClient _bingSpeechClient = new BingSpeechApiClient("a82fc42937ae4f46a8e2138408c413e6");
@@ -42,59 +44,96 @@ namespace ConferenceApp
 			btnRecord.Clicked -= OnRecordClicked;
 		}
 
-		async void OnRecordClicked(object sender, EventArgs e)
+		async Task RecognizeAndTranslateAsync()
 		{
-			if (!_recorder.IsRecording)
+			Task<string> audioRecordTask;
+			string targetFilename = null;
+
+			// Start recording audio.
+			try
 			{
-				btnRecord.Text = "Stop";
+				audioRecordTask = await _recorder.StartRecording();
+			}
+			catch (Exception ex)
+			{
+				txtRecognized.Text = $"Error recording audio: {ex}";
+				return;
+			}
 
-				Task<string> audioRecordTask;
-				try
+			// Wait for recording to complete.
+			try
+			{
+				targetFilename = await audioRecordTask;
+				if (targetFilename == null)
 				{
-					audioRecordTask = await _recorder.StartRecording();
+					return;
 				}
-				catch (Exception)
-				{
-					Debug.WriteLine("Starting recording failed.");
-					throw;
-				}
+			}
+			catch (Exception ex)
+			{
+				txtRecognized.Text = $"Error getting recorded audio file: {ex}";
+				return;
+			}
 
-				var filename = await audioRecordTask;
-				btnRecord.Text = "Start";
+			// Send recorded audio to service for speech to text conversion.
+			try
+			{
+				var recognitionResult = await _bingSpeechClient.SpeechToTextSimple(targetFilename);
 
-				if (filename != null)
+				if (recognitionResult.RecognitionStatus == RecognitionStatus.Success)
 				{
-					var recognitionResult = await _bingSpeechClient.SpeechToTextSimple(filename);
-					if (recognitionResult.RecognitionStatus == RecognitionStatus.Success)
-					{
-						txtRecognized.Text += recognitionResult.DisplayText;
-					}
-					else
-					{
-						Debug.WriteLine("Failed to process speech: " + recognitionResult.RecognitionStatus);
-					}
+					txtRecognized.Text = recognitionResult.DisplayText;
 				}
 				else
 				{
-					throw new InvalidOperationException("No audio file stored!");
+					txtRecognized.Text = $"Failed to process speech. Error: {recognitionResult.RecognitionStatus}";
 				}
+			}
+			catch (Exception ex)
+			{
+				txtRecognized.Text = $"Error converting speech to text: {ex}";
+				return;
+			}
+
+			_fileIndex++;
+		}
+
+		int _fileIndex;
+		string _tempPath;
+
+		async void OnRecordClicked(object sender, EventArgs e)
+		{
+			if (_recorder.IsRecording)
+			{
+				// If button is pressed and we are recording, stop recording and update UI.
+				btnRecord.IsEnabled = false;
+				await _recorder.StopRecording();
+				btnRecord.Text = "Start";
+				btnRecord.IsEnabled = true;
 			}
 			else
 			{
+				// If we are not recording, start recording and change UI to allow user to stop.
+				btnRecord.Text = "Stop";
+
+				// Store recorded data into a temp folder.
+				_fileIndex = 0;
+				_tempPath = Path.Combine(Path.GetTempPath(), "queued_recordings");
 				try
 				{
-					await _recorder.StopRecording();
-
+					Directory.Delete(_tempPath, true);
 				}
-				catch (Exception)
+				catch (Exception ex)
 				{
-					Debug.WriteLine("Stopping recording failed.");
-					throw;
+					Debug.WriteLine($"No success deleting '{_tempPath}': {ex}");
 				}
-				btnRecord.Text = "Start";
+				if (!Directory.Exists(_tempPath))
+				{
+					Directory.CreateDirectory(_tempPath);
+				}
+
+				await RecognizeAndTranslateAsync();
 			}
-
-
 		}
 	}
 }

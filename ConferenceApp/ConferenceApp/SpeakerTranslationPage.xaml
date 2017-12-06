@@ -1,14 +1,10 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="ConferenceApp.SpeakerTranslationPage">
-        <StackLayout>
-            <Button Text="Start"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand"
-					x:Name="btnRecord"/>
-
-		<Entry IsEnabled="False" HeightRequest="300" x:Name="txtRecognized"/>
+<?xml version="1.0" encoding="utf-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="ConferenceApp.SpeakerTranslationPage">
+	<StackLayout Padding="20">
+		<Button Text="Start" VerticalOptions="Center" x:Name="btnRecord" WidthRequest="200"/>
+		<Label Text="Recognized text" FontSize="Large"/>
+		<Label Text="Nothing recognized yet!" x:Name="txtRecognized" VerticalOptions="FillAndExpand" LineBreakMode="WordWrap" FontSize="Small"/>
+		<Label Text="Translation" FontSize="Large"/>
+		<Label Text="Nothing translated yet!" x:Name="txtTranslated" VerticalOptions="FillAndExpand" LineBreakMode="WordWrap" FontSize="Small"/>
 	</StackLayout>
-    
 </ContentPage>
