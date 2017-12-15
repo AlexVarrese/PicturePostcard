@@ -1,6 +1,7 @@
 ﻿using PicturePostcard.Shared;
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using Xamarin.Forms;
 
@@ -16,11 +17,27 @@ namespace PicturePostcard
 
 		IEmotional _emotional;
 
+		void HandleClearButtonClicked(object sender, ClickedEventArgs args)
+		{
+			_padView.Clear();
+			_masterLayout.BackgroundColor = Color.AntiqueWhite;
+			_image.Source = "xamarin.png";
+		}
+
 		async void HandleProcessButtonClicked(object sender, ClickedEventArgs args)
 		{
 			// Recognize message
 			Report("Recognizing text");
-			var imageStream = await _padView.GetImageStreamAsync(SignaturePad.Forms.SignatureImageFormat.Jpeg);
+			var imageStream = await _padView.GetImageStreamAsync(SignaturePad.Forms.SignatureImageFormat.Png);
+			/*Directory.CreateDirectory(App.UwpPath);
+			var p = Path.Combine(App.UwpPath, "image.png");
+			Debug.WriteLine(p);
+			using (var f = File.OpenWrite(p))
+			{
+				imageStream.CopyTo(f);
+			}
+			*/
+
 			var message = await _emotional.RecognizeHandwrittenTextAsync(imageStream);
 
 			if (string.IsNullOrWhiteSpace(message))
@@ -36,7 +53,7 @@ namespace PicturePostcard
 			// Get sentiment
 			Report("Getting sentiment");
 			var sentiment = await _emotional.AnalyzeSentimentAsync(message);
-			switch(sentiment)
+			switch (sentiment)
 			{
 				case Shared.Sentiment.Unknown:
 					Report("No feelings, Mr. Spock?");
@@ -60,7 +77,7 @@ namespace PicturePostcard
 			Report("Getting key phrases");
 			var keyPhrases = await _emotional.GetKeyPhrasesAsync(message);
 			string imageSearchTerm = message;
-			if(keyPhrases.Count <= 0)
+			if (keyPhrases.Count <= 0)
 			{
 				Report("Couldn't figure out what you mean.");
 			}
@@ -73,7 +90,7 @@ namespace PicturePostcard
 			// Get a matching image.
 			Report("Looking for an image");
 			var imageUrl = await _emotional.GetImageUrlAsync(imageSearchTerm);
-			if(imageUrl == null)
+			if (imageUrl == null)
 			{
 				Report("Could not find an image");
 				_image.Source = "xamarin.png";
@@ -87,7 +104,7 @@ namespace PicturePostcard
 		protected override void OnSizeAllocated(double width, double height)
 		{
 			base.OnSizeAllocated(width, height);
-			if(height > width)
+			if (height > width)
 			{
 				// Portrait
 				_masterLayout.Orientation = StackOrientation.Vertical;

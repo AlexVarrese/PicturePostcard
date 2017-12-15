@@ -7,6 +7,7 @@ namespace PicturePostcard
 {
     public partial class App : Application
 	{
+		public static string UwpPath;
 		public App ()
 		{
 			InitializeComponent();

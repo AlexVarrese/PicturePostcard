@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -69,9 +70,17 @@ namespace PicturePostcard.Shared
 		{
 			var requestContent = new StreamContent(imageData);
 			requestContent.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
-			await _client.PostAsync("/recognizeText?handwriting=true", requestContent).ConfigureAwait(false);
+			HttpResponseMessage response;
 
-			var response = await _client.PostAsync("/vision/v1.0/recognizeText?handwriting=true", requestContent);
+			try
+			{
+				response = await _client.PostAsync("recognizeText?handwriting=true", requestContent).ConfigureAwait(false);
+			}
+			catch (Exception ex)
+			{
+				Debug.WriteLine("Failed to post image data: " + ex);
+				throw;
+			}
 
 			string operationLocation = null;
 			if(response.IsSuccessStatusCode)
@@ -85,8 +94,19 @@ namespace PicturePostcard.Shared
 			string recognizedData = null;
 			if(operationLocation != null)
 			{
-				await Task.Delay(5000).ConfigureAwait(false);
-				recognizedData = await _client.GetStringAsync(operationLocation).ConfigureAwait(false);
+				while (true)
+				{
+					try
+					{
+						await Task.Delay(3000).ConfigureAwait(false);
+						recognizedData = await _client.GetStringAsync(operationLocation).ConfigureAwait(false);
+						break;
+					}
+					catch (TaskCanceledException)
+					{
+						Debug.WriteLine("Image has not been processed yet. Retrying...");
+					}
+				}
 			}
 
 			return recognizedData;
