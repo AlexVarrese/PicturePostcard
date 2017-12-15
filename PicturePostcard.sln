@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27130.0
+VisualStudioVersion = 15.0.27130.2010
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PicturePostcard.Android", "PicturePostcard\PicturePostcard.Android\PicturePostcard.Android.csproj", "{E979272C-B725-4B94-BE27-58DC3FDFBBDB}"
 EndProject
@@ -9,9 +9,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PicturePostcard.iOS", "Pict
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PicturePostcard.UWP", "PicturePostcard\PicturePostcard.UWP\PicturePostcard.UWP.csproj", "{88757998-8F93-476C-99B0-A11E9FD146B2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PicturePostcard.Forms", "PicturePostcard\PicturePostcard\PicturePostcard.Forms.csproj", "{5F3805D3-70E1-4BFD-AC02-ADAD2E1C4C2F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PicturePostcard.Forms", "PicturePostcard\PicturePostcard\PicturePostcard.Forms.csproj", "{5F3805D3-70E1-4BFD-AC02-ADAD2E1C4C2F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PicturePostcard.Shared", "PicturePostcard\PicturePostcard.Shared\PicturePostcard.Shared.csproj", "{156185C1-8BFA-4AAF-A955-646D561B542B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PicturePostcard.Shared", "PicturePostcard\PicturePostcard.Shared\PicturePostcard.Shared.csproj", "{156185C1-8BFA-4AAF-A955-646D561B542B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Forms", "Forms", "{5EBBFCE9-80E9-446D-AA33-E85153677FB8}"
 EndProject
@@ -185,8 +185,6 @@ Global
 		{88757998-8F93-476C-99B0-A11E9FD146B2}.AppStore|x86.Deploy.0 = Release|x86
 		{88757998-8F93-476C-99B0-A11E9FD146B2}.Debug|Any CPU.ActiveCfg = Debug|x86
 		{88757998-8F93-476C-99B0-A11E9FD146B2}.Debug|ARM.ActiveCfg = Debug|ARM
-		{88757998-8F93-476C-99B0-A11E9FD146B2}.Debug|ARM.Build.0 = Debug|ARM
-		{88757998-8F93-476C-99B0-A11E9FD146B2}.Debug|ARM.Deploy.0 = Debug|ARM
 		{88757998-8F93-476C-99B0-A11E9FD146B2}.Debug|iPhone.ActiveCfg = Debug|x86
 		{88757998-8F93-476C-99B0-A11E9FD146B2}.Debug|iPhoneSimulator.ActiveCfg = Debug|x86
 		{88757998-8F93-476C-99B0-A11E9FD146B2}.Debug|x64.ActiveCfg = Debug|x64

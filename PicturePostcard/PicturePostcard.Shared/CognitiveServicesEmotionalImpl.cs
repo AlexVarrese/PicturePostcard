@@ -12,7 +12,7 @@ namespace PicturePostcard.Shared
 	public class CognitiveServicesEmotionalImpl : IEmotional
 	{
 		// Get a trial key at https://azure.microsoft.com/en-us/try/cognitive-services/
-		const string API_KEY = "1ecf4c9e-f4ed-45ee-b47a-1227855edbef";
+		const string API_KEY = "ae7d3af7d10e4bb7b0acd702c04f6d43";
 
 		// Trial keys only work for the West Central US region.
 		const string COGNITIVE_SERVICES_BASE_URL = "https://westcentralus.api.cognitive.microsoft.com/vision/v1.0/";
@@ -72,9 +72,24 @@ namespace PicturePostcard.Shared
 			await _client.PostAsync("/recognizeText?handwriting=true", requestContent).ConfigureAwait(false);
 
 			var response = await _client.PostAsync("/vision/v1.0/recognizeText?handwriting=true", requestContent);
-			var responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
-			return "";
+			string operationLocation = null;
+			if(response.IsSuccessStatusCode)
+			{
+				if(response.Headers.TryGetValues("Operation-Location", out IEnumerable<string> headerValues))
+				{
+					operationLocation = headerValues.FirstOrDefault();
+				}
+			}
+
+			string recognizedData = null;
+			if(operationLocation != null)
+			{
+				await Task.Delay(5000).ConfigureAwait(false);
+				recognizedData = await _client.GetStringAsync(operationLocation).ConfigureAwait(false);
+			}
+
+			return recognizedData;
 		}
 
 		public async Task<string> GetImageUrlAsync(string description)
