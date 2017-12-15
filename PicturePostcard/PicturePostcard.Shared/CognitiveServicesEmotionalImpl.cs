@@ -68,13 +68,23 @@ namespace PicturePostcard.Shared
 
 		public async Task<string> RecognizeHandwrittenTextAsync(Stream imageData)
 		{
-			var requestContent = new StreamContent(imageData);
-			requestContent.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+			if(imageData == null)
+			{
+				return null;
+			}
+
+			var buffer = new byte[imageData.Length];
+			await imageData.ReadAsync(buffer, 0, (int)imageData.Length).ConfigureAwait(false);
+			
 			HttpResponseMessage response;
 
 			try
 			{
-				response = await _client.PostAsync("recognizeText?handwriting=true", requestContent).ConfigureAwait(false);
+				using (var requestContent = new ByteArrayContent(buffer))
+				{
+					requestContent.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+					response = await _client.PostAsync("recognizeText?handwriting=true", requestContent).ConfigureAwait(false);
+				}
 			}
 			catch (Exception ex)
 			{

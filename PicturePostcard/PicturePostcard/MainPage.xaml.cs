@@ -28,15 +28,15 @@ namespace PicturePostcard
 		{
 			// Recognize message
 			Report("Recognizing text");
-			var imageStream = await _padView.GetImageStreamAsync(SignaturePad.Forms.SignatureImageFormat.Png);
-			/*Directory.CreateDirectory(App.UwpPath);
+			var imageStream = await _padView.GetImageStreamAsync(SignaturePad.Forms.SignatureImageFormat.Jpeg);
+			Directory.CreateDirectory(App.UwpPath);
 			var p = Path.Combine(App.UwpPath, "image.png");
 			Debug.WriteLine(p);
 			using (var f = File.OpenWrite(p))
 			{
 				imageStream.CopyTo(f);
 			}
-			*/
+			imageStream.Seek(0, SeekOrigin.Begin);
 
 			var message = await _emotional.RecognizeHandwrittenTextAsync(imageStream);
 
