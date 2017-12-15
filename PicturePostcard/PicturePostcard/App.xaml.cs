@@ -1,19 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
+﻿using PicturePostcard.Shared;
 using Xamarin.Forms;
+using Xamarin.Forms.Xaml;
 
+[assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace PicturePostcard
 {
-	public partial class App : Application
+    public partial class App : Application
 	{
 		public App ()
 		{
 			InitializeComponent();
 
-			MainPage = new PicturePostcard.MainPage();
+			DependencyService.Register<IEmotional, CognitiveServicesEmotionalImpl>();
+			MainPage = new MainPage();
 		}
 
 		protected override void OnStart ()

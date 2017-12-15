@@ -5,7 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Xamarin.Controls.SignaturePad.Forms" Version="2.3.0" />
     <PackageReference Include="Xamarin.Forms" Version="2.5.0.121934" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PicturePostcard.Shared\PicturePostcard.Shared.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
-    <ProjectGuid>{F5B027D7-B23E-4628-BAE4-918DCB903BF0}</ProjectGuid>
+    <ProjectGuid>{88757998-8F93-476C-99B0-A11E9FD146B2}</ProjectGuid>
     <OutputType>AppContainerExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>PicturePostcard.UWP</RootNamespace>
@@ -104,6 +104,7 @@
     <None Include="PicturePostcard.UWP_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\xamarin.png" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-100.png" />
     <Content Include="Assets\LockScreenLogo.scale-125.png" />
@@ -148,13 +149,16 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Xamarin.Controls.SignaturePad.Forms">
+      <Version>2.3.0</Version>
+    </PackageReference>
     <PackageReference Include="Xamarin.Forms" Version="2.5.0.121934" />
-    <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="6.0.1"/>
+    <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="6.0.1" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\PicturePostcard\PicturePostcard.csproj">
-      <Project>{E21AAC7D-DD99-4474-83E8-AFC3F01E6543}</Project>
-      <Name>PicturePostcard</Name>
+    <ProjectReference Include="..\PicturePostcard\PicturePostcard.Forms.csproj">
+      <Project>{5F3805D3-70E1-4BFD-AC02-ADAD2E1C4C2F}</Project>
+      <Name>PicturePostcard.Forms</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
