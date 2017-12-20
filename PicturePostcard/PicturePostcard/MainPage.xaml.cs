@@ -28,7 +28,12 @@ namespace PicturePostcard
 		{
 			// Recognize message
 			Report("Recognizing text");
-			var imageStream = await _padView.GetImageStreamAsync(SignaturePad.Forms.SignatureImageFormat.Jpeg);
+
+			// Make sure to set the fill color. The service cannot handle images with alpha transparency.
+			var imageStream = await _padView.GetImageStreamAsync(SignaturePad.Forms.SignatureImageFormat.Png, strokeColor: Color.Black, fillColor: Color.White);
+
+			// Commenting in this will save the file to disk before sending it into the cloud. Useful for debugging.
+			/*
 			Directory.CreateDirectory(App.UwpPath);
 			var p = Path.Combine(App.UwpPath, "image.png");
 			Debug.WriteLine(p);
@@ -37,6 +42,9 @@ namespace PicturePostcard
 				imageStream.CopyTo(f);
 			}
 			imageStream.Seek(0, SeekOrigin.Begin);
+			imageStream.Close();
+			imageStream = File.OpenRead(Path.Combine(App.UwpPath, "image.png"));
+			*/
 
 			var message = await _emotional.RecognizeHandwrittenTextAsync(imageStream);
 

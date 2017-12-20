@@ -9,7 +9,7 @@ namespace PicturePostcard.Shared
         // https://westus.dev.cognitive.microsoft.com/docs/services/56f91f2d778daf23d8ec6739/operations/587f2c6a154055056008f200
         Task<string> RecognizeHandwrittenTextAsync(Stream imageData);
 
-        // https://docs.microsoft.com/en-us/azure/cognitive-services/text-analytics/how-tos/text-analytics-how-to-sentiment-analysis
+        // 
         Task<Sentiment> AnalyzeSentimentAsync(string text);
 
 		// https://docs.microsoft.com/en-us/azure/cognitive-services/text-analytics/how-tos/text-analytics-how-to-keyword-extraction
