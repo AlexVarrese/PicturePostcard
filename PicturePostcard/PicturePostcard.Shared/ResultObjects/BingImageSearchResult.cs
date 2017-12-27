@@ -1,8 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace PicturePostcard.Shared
 {
 	public class BingImageSearchResult
+	{
+		public string Type { get; set; }
+		public string ReadLink { get; set; }
+		public string WebSearchUrl { get; set; }
+		public int TotalEstimatedMatches { get; set; }
+		public int NextOffset { get; set; }
+		public IList<BingImageData> Value { get; set; }
+	}
+
+	public class BingImageData
 	{
 		public string Name { get; set; }
 		public string WebSearchUrl { get; set; }

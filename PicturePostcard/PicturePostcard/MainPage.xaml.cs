@@ -20,14 +20,13 @@ namespace PicturePostcard
 		void HandleClearButtonClicked(object sender, ClickedEventArgs args)
 		{
 			_padView.Clear();
-			_masterLayout.BackgroundColor = Color.AntiqueWhite;
 			_image.Source = "xamarin.png";
 		}
 
 		async void HandleProcessButtonClicked(object sender, ClickedEventArgs args)
 		{
 			// Recognize message
-			Report("Recognizing text");
+			Report("Let me try to recognize your handwriting...", clear: true);
 
 			// Make sure to set the fill color. The service cannot handle images with alpha transparency.
 			var imageStream = await _padView.GetImageStreamAsync(SignaturePad.Forms.SignatureImageFormat.Png, strokeColor: Color.Black, fillColor: Color.White);
@@ -50,89 +49,75 @@ namespace PicturePostcard
 
 			if (string.IsNullOrWhiteSpace(message))
 			{
-				Report("Sorry, I could not recognize this.");
-				_recognizedTextLabel.Text = "unable to recognize - try again";
+				Report("Sorry, I could not recognize this. Can you maybe try to write a bit clearer?");
 				return;
 			}
 
-			Report($"You wrote: {message}");
-			_recognizedTextLabel.Text = message;
+			Report($"I think you wrote '{message}'. Does that mean you are...", newLine: false);
 
 			// Get sentiment
-			Report("Getting sentiment");
 			var sentiment = await _emotional.AnalyzeSentimentAsync(message);
 			switch (sentiment)
 			{
 				case Shared.Sentiment.Unknown:
-					Report("No feelings, Mr. Spock?");
-					_masterLayout.BackgroundColor = Color.AntiqueWhite;
+					Report("well...I don't know how you feel about this!");
+					_sentimentLabel.Text = "I don't know how I feel today!";
+					_sentimentLabel.TextColor = Color.Black;
 					break;
 				case Shared.Sentiment.Normal:
-					Report("Not excited?");
-					_masterLayout.BackgroundColor = Color.LightSteelBlue;
+					Report("feeling indifferent about this?");
+					_sentimentLabel.Text = "I'm feeling indifferent.";
+					_sentimentLabel.TextColor = Color.Gray;
 					break;
 				case Shared.Sentiment.Negative:
-					Report("Cheer up!");
-					_masterLayout.BackgroundColor = Color.DarkRed;
+					Report("concerned about this? No worries!");
+					_sentimentLabel.Text = "Stay away. I'm angry.";
+					_sentimentLabel.TextColor = Color.Red;
 					break;
 				case Shared.Sentiment.Positive:
-					Report("Happiness all the way!");
-					_masterLayout.BackgroundColor = Color.LightYellow;
+					Report("feeling happy?");
+					_sentimentLabel.Text = "I'm happy!";
+					_sentimentLabel.TextColor = Color.LightGoldenrodYellow;
 					break;
 			}
 
 			// Get key content
-			Report("Getting key phrases");
+			Report("Let's see what the key phrases of your message are.");
 			var keyPhrases = await _emotional.GetKeyPhrasesAsync(message);
 			string imageSearchTerm = message;
 			if (keyPhrases.Count <= 0)
 			{
-				Report("Couldn't figure out what you mean.");
+				Report("Sorry, I could not figure ot the key phrases.");
 			}
 			else
 			{
 				imageSearchTerm = string.Join(" ", keyPhrases);
-				Report($"I understood: {imageSearchTerm}");
+				Report($"Here's the important parts of your message: '{imageSearchTerm}'");
 			}
 
 			// Get a matching image.
-			Report("Looking for an image");
+			Report("Based on these key phrases, let's find an image!");
 			var imageUrl = await _emotional.GetImageUrlAsync(imageSearchTerm);
 			if (imageUrl == null)
 			{
-				Report("Could not find an image");
+				Report("Sorry, could not find an image. Showing you a Xamarin logo instead.");
 				_image.Source = "xamarin.png";
 			}
 			else
 			{
+				Report("I found a nice image for you!");
 				_image.Source = ImageSource.FromUri(new Uri(imageUrl));
 			}
 		}
-
-		protected override void OnSizeAllocated(double width, double height)
-		{
-			base.OnSizeAllocated(width, height);
-			if (height > width)
-			{
-				// Portrait
-				_masterLayout.Orientation = StackOrientation.Vertical;
-
-				_image.WidthRequest = _masterLayout.Width;
-				_image.HeightRequest = 300;
-			}
-			else
-			{
-				// Landscape
-				_masterLayout.Orientation = StackOrientation.Horizontal;
-
-				_image.WidthRequest = 300;
-				_image.HeightRequest = _masterLayout.Height;
-			}
-		}
-
-		void Report(string msg)
+		
+		void Report(string msg, bool newLine = true, bool clear = false)
 		{
 			Debug.WriteLine(msg);
+			if(clear)
+			{
+				_statusLabel.Text = string.Empty;
+			}
+			_statusLabel.Text += msg + (newLine ? Environment.NewLine : string.Empty);
 		}
 	}
 }

@@ -20,6 +20,7 @@ namespace PicturePostcard.Shared
 		const string BING_SEARCH_API_KEY = "9401de7e550b452799264cef767219bf";
 		
 		// Trial keys only work for the West Central US region.
+		// This base URL works for most of the services. Bing Search uses a different one.
 		const string COGNITIVE_SERVICES_BASE_URL = "https://westcentralus.api.cognitive.microsoft.com/";
 
 		// All services are RESTful.
@@ -31,6 +32,7 @@ namespace PicturePostcard.Shared
 		
 		public async Task<Sentiment> AnalyzeSentimentAsync(string text)
 		{
+			// Quickstart: https://docs.microsoft.com/en-us/azure/cognitive-services/text-analytics/how-tos/text-analytics-how-to-sentiment-analysis
 			// The service supports up to 50.000 items. We only use one here.
 			var requestJson = "{ \"documents\": [ { \"language\": \"en\", \"id\": \"1\", \"text\": \"" + text + "\" } ] }";
 
@@ -73,6 +75,7 @@ namespace PicturePostcard.Shared
 
 		public async Task<IReadOnlyList<string>> GetKeyPhrasesAsync(string text)
 		{
+			// Quickstart: https://docs.microsoft.com/en-us/azure/cognitive-services/text-analytics/how-tos/text-analytics-how-to-keyword-extraction
 			// The service supports up to 50.000 items. We only use one here.
 			var requestJson = "{ \"documents\": [ { \"language\": \"en\", \"id\": \"1\", \"text\": \"" + text + "\" } ] }";
 
@@ -105,13 +108,15 @@ namespace PicturePostcard.Shared
 
 		public async Task<string> RecognizeHandwrittenTextAsync(Stream imageData)
 		{
+			// Quickstart: https://docs.microsoft.com/en-us/azure/cognitive-services/computer-vision/quickstarts/csharp#RecognizeText
+
 			if (imageData == null)
 			{
 				return null;
 			}
 
 			HttpResponseMessage response;
-
+			
 			// Send image data to the recognition service.
 			using (var requestContent = new StreamContent(imageData))
 			{
@@ -182,13 +187,55 @@ namespace PicturePostcard.Shared
 
 		public async Task<string> GetImageUrlAsync(string description)
 		{
-			var requestMessage = new HttpRequestMessage(HttpMethod.Get, $"bing/v7.0/images/search?q={HttpUtility.UrlEncode(description)}");
+			// Quickstart: https://docs.microsoft.com/en-us/azure/cognitive-services/bing-image-search/quick-start
+
+			// Bing image search is using a different base URL.
+			var requestMessage = new HttpRequestMessage(HttpMethod.Get, $"https://api.cognitive.microsoft.com/bing/v7.0/images/search?q={HttpUtility.UrlEncode(description)}");
 			requestMessage.Headers.Add("Ocp-Apim-Subscription-Key", BING_SEARCH_API_KEY);
 			var response = await _client.SendAsync(requestMessage).ConfigureAwait(false);
 			var resultJson = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-			var images = JsonConvert.DeserializeObject<List<BingImageSearchResult>>(resultJson);
 
-			return images?.FirstOrDefault()?.ContentUrl;
+			// Example response:
+			//{
+			//	"_type":"Images",
+			//	"instrumentation":{},
+			//	"readLink":"https:\/\/api.cognitive.microsoft.com\/api\/v7\/images\/search?q=HALLO",
+			//	"webSearchUrl":"https:\/\/www.bing.com\/images\/search?q=HALLO&FORM=OIIARP",
+			//	"totalEstimatedMatches":879,
+			//	"nextOffset":38,
+			//	"value":[
+			//		{
+			//			"webSearchUrl":"https:\/\/www.bing.com\/images\/search?view=detailv2&FORM=OIIRPO&q=HALLO&id=12C4A2B0BDC20F6FE47062CDE8748E16BD00C7FE&simid=608016987088225815",
+			//			"name":"Hallo UV Licht - Design Nation",
+			//			"thumbnailUrl":"https:\/\/tse3.mm.bing.net\/th?id=OIP.plfFGnf0n4BO7jJlSeIffwHaLH&pid=Api",
+			//			"datePublished":"2011-10-11T03:59:00.0000000Z",
+			//			"contentUrl":"http:\/\/www.designnation.de\/Media\/Galerie\/4d6eb4545d7e9,Hallo-UV-Licht.jpg",
+			//			"hostPageUrl":"http:\/\/galerie.designnation.de\/bild\/52838",
+			//			"contentSize":"271464 B",
+			//			"encodingFormat":"jpeg",
+			//			"hostPageDisplayUrl":"galerie.designnation.de\/bild\/52838",
+			//			"width":1245,
+			//			"height":830,
+			//			"thumbnail":{
+			//				"width":474,
+			//				"height":711
+			//			},
+			//			"imageInsightsToken":"ccid_plfFGnf0*mid_12C4A2B0BDC20F6FE47062CDE8748E16BD00C7FE*simid_608016987088225815*thid_OIP.plfFGnf0n4BO7jJlSeIffwHaLH",
+			//			"insightsMetadata":{
+			//				"pagesIncludingCount":4,
+			//				"availableSizesCount":1
+			//			},
+			//			"imageId":"12C4A2B0BDC20F6FE47062CDE8748E16BD00C7FE",
+			//			"accentColor":"4A00CC"
+			//		},
+			//		[......]
+			//	]
+			//}
+			 
+
+			var images = JsonConvert.DeserializeObject<BingImageSearchResult>(resultJson);
+			var imageData = images?.Value?.FirstOrDefault();
+			return imageData?.ContentUrl;
 		}
 	}
 }
