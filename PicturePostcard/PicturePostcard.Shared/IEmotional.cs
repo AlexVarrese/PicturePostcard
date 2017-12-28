@@ -4,19 +4,38 @@ using System.Threading.Tasks;
 
 namespace PicturePostcard.Shared
 {
-    public interface IEmotional
-    {
-        // https://westus.dev.cognitive.microsoft.com/docs/services/56f91f2d778daf23d8ec6739/operations/587f2c6a154055056008f200
-        Task<string> RecognizeHandwrittenTextAsync(Stream imageData);
+	/// <summary>
+	/// Interface declaration for demonstration of Azure Cognitive Services.
+	/// </summary>
+	public interface IEmotional
+	{
+		/// <summary>
+		/// Recognizes handwritten text.
+		/// </summary>
+		/// <param name="imageData">image data as a stream</param>
+		/// <returns>recognied text or null if nothing was recognized</returns>
+		Task<string> RecognizeHandwrittenTextAsync(Stream imageData);
 
-        // 
-        Task<Sentiment> AnalyzeSentimentAsync(string text);
+		
+		/// <summary>
+		/// Analyzes the sentiment of a given text.
+		/// </summary>
+		/// <param name="text">text to analyze</param>
+		/// <returns>the sentiment</returns>
+		Task<Sentiment> AnalyzeSentimentAsync(string text);
 
-		// https://docs.microsoft.com/en-us/azure/cognitive-services/text-analytics/how-tos/text-analytics-how-to-keyword-extraction
+		/// <summary>
+		/// Extracts the key phrases of a text.
+		/// </summary>
+		/// <param name="text">text to analyze</param>
+		/// <returns>list of key phrases</returns>
 		Task<IReadOnlyList<string>> GetKeyPhrasesAsync(string text);
 
-		// https://docs.microsoft.com/en-us/azure/cognitive-services/bing-image-search/tutorial-bing-image-search-single-page-app
-		// https://docs.microsoft.com/en-gb/azure/cognitive-services/computer-vision/quickstarts/csharp#GetThumbnail
+		/// <summary>
+		/// Returns the url of an image matching the given description.
+		/// </summary>
+		/// <param name="description">search term</param>
+		/// <returns>URL of image or null if no image was found</returns>
 		Task<string> GetImageUrlAsync(string description);
-    }
+	}
 }

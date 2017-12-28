@@ -190,7 +190,8 @@ namespace PicturePostcard.Shared
 			// Quickstart: https://docs.microsoft.com/en-us/azure/cognitive-services/bing-image-search/quick-start
 
 			// Bing image search is using a different base URL.
-			var requestMessage = new HttpRequestMessage(HttpMethod.Get, $"https://api.cognitive.microsoft.com/bing/v7.0/images/search?q={HttpUtility.UrlEncode(description)}");
+			var requestMessage = new HttpRequestMessage(HttpMethod.Get, 
+				$"https://api.cognitive.microsoft.com/bing/v7.0/images/search?q={HttpUtility.UrlEncode(description)}&license=share&safeSearch=strict");
 			requestMessage.Headers.Add("Ocp-Apim-Subscription-Key", BING_SEARCH_API_KEY);
 			var response = await _client.SendAsync(requestMessage).ConfigureAwait(false);
 			var resultJson = await response.Content.ReadAsStringAsync().ConfigureAwait(false);

@@ -17,10 +17,19 @@ namespace PicturePostcard
 
 		IEmotional _emotional;
 
+		protected override void OnAppearing()
+		{
+			base.OnAppearing();
+			HandleClearButtonClicked(null, null);
+		}
+
 		void HandleClearButtonClicked(object sender, ClickedEventArgs args)
 		{
+			Report("Picture Postcard powered by Azure Cognitive Services and Xamarin", clear: true);
 			_padView.Clear();
 			_image.Source = "xamarin.png";
+			_recognizedLabel.Text = "please write your message and press 'Process'";
+			_sentimentLabel.Text = string.Empty;
 		}
 
 		async void HandleProcessButtonClicked(object sender, ClickedEventArgs args)
@@ -54,30 +63,31 @@ namespace PicturePostcard
 			}
 
 			Report($"I think you wrote '{message}'. Does that mean you are...", newLine: false);
+			_recognizedLabel.Text = message;
 
 			// Get sentiment
 			var sentiment = await _emotional.AnalyzeSentimentAsync(message);
 			switch (sentiment)
 			{
-				case Shared.Sentiment.Unknown:
+				case Sentiment.Unknown:
 					Report("well...I don't know how you feel about this!");
-					_sentimentLabel.Text = "I don't know how I feel today!";
+					_sentimentLabel.Text = "I don't know how I feel today! 🤔";
 					_sentimentLabel.TextColor = Color.Black;
 					break;
-				case Shared.Sentiment.Normal:
+				case Sentiment.Normal:
 					Report("feeling indifferent about this?");
-					_sentimentLabel.Text = "I'm feeling indifferent.";
-					_sentimentLabel.TextColor = Color.Gray;
+					_sentimentLabel.Text = "I'm feeling indifferent. 😐";
+					_sentimentLabel.TextColor = Color.DarkGray;
 					break;
-				case Shared.Sentiment.Negative:
+				case Sentiment.Negative:
 					Report("concerned about this? No worries!");
-					_sentimentLabel.Text = "Stay away. I'm angry.";
+					_sentimentLabel.Text = "You better stay away. I'm angry. 😡";
 					_sentimentLabel.TextColor = Color.Red;
 					break;
-				case Shared.Sentiment.Positive:
+				case Sentiment.Positive:
 					Report("feeling happy?");
-					_sentimentLabel.Text = "I'm happy!";
-					_sentimentLabel.TextColor = Color.LightGoldenrodYellow;
+					_sentimentLabel.Text = "All is good. I'm happy! 🤗";
+					_sentimentLabel.TextColor = Color.Orange;
 					break;
 			}
 

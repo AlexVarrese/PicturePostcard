@@ -28,9 +28,11 @@
 								HorizontalOptions="Fill"
 								Grid.Row="0" Grid.Column="0"/>
 
+			<Label x:Name="_recognizedLabel" Margin="0,0,0,30" Grid.Column="0" Grid.Row="0" VerticalOptions="End" HorizontalOptions="Center" TextColor="DarkGray" FontSize="Medium"/>
+
 			<Grid Grid.Row="0" Grid.Column="1">
 				<Grid.RowDefinitions>
-					<RowDefinition Height="1.1*"/>
+					<RowDefinition Height="1.7*"/>
 					<RowDefinition Height="2.2*"/>
 					<RowDefinition Height="*"/>
 				</Grid.RowDefinitions>
@@ -44,7 +46,7 @@
 				</StackLayout>
 
 				<Image x:Name="_image" Source="xamarin.png" WidthRequest="200" HeightRequest="200" Aspect="AspectFit" Grid.Column="0" Grid.Row="0" HorizontalOptions="End" VerticalOptions="Start"/>
-				<Label x:Name="_sentimentLabel" Grid.Column="0" Grid.Row="1" FontSize="Large" HorizontalOptions="Center" HorizontalTextAlignment="Center"/>
+				<Label x:Name="_sentimentLabel" Grid.Column="0" Grid.Row="1" FontSize="50" HorizontalOptions="Center" HorizontalTextAlignment="Center" WidthRequest="400"/>
 				<Label x:Name="_statusLabel" FontSize="Micro" TextColor="Gray" Grid.Column="0" Grid.Row="2" Margin="30,0,0,0"/>
 			</Grid>
 		</Grid>
