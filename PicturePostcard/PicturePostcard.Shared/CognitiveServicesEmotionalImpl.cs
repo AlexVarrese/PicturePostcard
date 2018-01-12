@@ -15,13 +15,14 @@ namespace PicturePostcard.Shared
 	public class CognitiveServicesEmotionalImpl : IEmotional
 	{
 		// Get a trial key at https://azure.microsoft.com/en-us/try/cognitive-services/
-		const string COMPUTER_VISION_API_KEY = "ae7d3af7d10e4bb7b0acd702c04f6d43";
-		const string TEXT_ANALYTICS_API_KEY = "64cf0bd55bbe49d5bff32aa851a2d204";
-		const string BING_SEARCH_API_KEY = "9401de7e550b452799264cef767219bf";
-		
-		// Trial keys only work for the West Central US region.
+		// or use youe Azure subscription to create a "Cognitive Services" resource.
+		const string COMPUTER_VISION_API_KEY = "32b240209d704902b4047bab61846c08";
+		const string TEXT_ANALYTICS_API_KEY = "d0b30a4079eb4584b085d1f695be48f3";
+		const string BING_SEARCH_API_KEY = "9204b829ac5646eeb6c603d3a318e3c7";
+
+		// Trial keys only work for the West Central US region (https://westcentralus.api.cognitive.microsoft.com/).
 		// This base URL works for most of the services. Bing Search uses a different one.
-		const string COGNITIVE_SERVICES_BASE_URL = "https://westcentralus.api.cognitive.microsoft.com/";
+		const string COGNITIVE_SERVICES_BASE_URL = "https://westeurope.api.cognitive.microsoft.com";
 
 		// All services are RESTful.
 		readonly HttpClient _client = new HttpClient
