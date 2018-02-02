@@ -24,7 +24,7 @@ namespace PicturePostcard.Shared
 
 			if (new[] { "bad", "fail", "miserable" }.Any(x => text.ToLower().Contains(x)))
 			{
-				return Sentiment.Positive;
+				return Sentiment.Negative;
 			}
 
 			return Sentiment.Normal;

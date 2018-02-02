@@ -37,6 +37,7 @@ namespace PicturePostcard.Shared
 			// The service supports up to 50.000 items. We only use one here.
 			var requestJson = "{ \"documents\": [ { \"language\": \"en\", \"id\": \"1\", \"text\": \"" + text + "\" } ] }";
 
+			#region REQUEST
 			HttpResponseMessage response;
 			using (var requestContent = new StringContent(requestJson))
 			{
@@ -50,7 +51,9 @@ namespace PicturePostcard.Shared
 			{
 				return Sentiment.Unknown;
 			}
+			#endregion
 
+			#region PARSE
 			var responseJson = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 			var recognitionResult = JsonConvert.DeserializeObject<SentimentRecognitionResult>(responseJson);
 
@@ -70,6 +73,7 @@ namespace PicturePostcard.Shared
 			{
 				return Sentiment.Normal;
 			}
+			#endregion
 
 			return Sentiment.Positive;
 		}
@@ -80,6 +84,7 @@ namespace PicturePostcard.Shared
 			// The service supports up to 50.000 items. We only use one here.
 			var requestJson = "{ \"documents\": [ { \"language\": \"en\", \"id\": \"1\", \"text\": \"" + text + "\" } ] }";
 
+			#region REQUEST
 			HttpResponseMessage response;
 			using (var requestContent = new StringContent(requestJson))
 			{
@@ -93,7 +98,9 @@ namespace PicturePostcard.Shared
 			{
 				return null;
 			}
+			#endregion
 
+			#region PARSE
 			var responseJson = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 			var recognitionResult = JsonConvert.DeserializeObject<KeyPhrasesRecognitionResult>(responseJson);
 
@@ -101,11 +108,13 @@ namespace PicturePostcard.Shared
 			{
 				return null;
 			}
+			#endregion
 
 			var keyPhrases = recognitionResult.Documents?.FirstOrDefault()?.KeyPhrases?.ToList();
 
 			return keyPhrases;
 		}
+		
 
 		public async Task<string> RecognizeHandwrittenTextAsync(Stream imageData)
 		{
@@ -117,16 +126,28 @@ namespace PicturePostcard.Shared
 			}
 
 			HttpResponseMessage response;
-			
+
 			// Send image data to the recognition service.
+			#region SENDIMAGE
 			using (var requestContent = new StreamContent(imageData))
 			{
 				requestContent.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
 				requestContent.Headers.Add("Ocp-Apim-Subscription-Key", COMPUTER_VISION_API_KEY);
-				response = await _client.PostAsync("vision/v1.0/recognizeText?handwriting=true", requestContent).ConfigureAwait(false);
+
+				try
+				{
+					response = await _client.PostAsync("vision/v1.0/recognizeText?handwriting=true", requestContent).ConfigureAwait(false);
+				}
+				catch (Exception ex)
+				{
+					Debug.WriteLine($"Failed to post request. Error: {ex.Message}");
+					throw;
+				}
 			}
-			
+			#endregion
+
 			// The response will be a URL where we can pick up the recognition result.
+			#region GETRESULTLOCATION
 			string operationLocation = null;
 			if (response.IsSuccessStatusCode)
 			{
@@ -135,8 +156,10 @@ namespace PicturePostcard.Shared
 					operationLocation = headerValues.FirstOrDefault();
 				}
 			}
+			#endregion
 
 			// Keep on polling the URL until the service has completed processing.
+			#region GETRESULT
 			string recognizedData = null;
 			if (operationLocation != null)
 			{
@@ -157,87 +180,32 @@ namespace PicturePostcard.Shared
 					}
 				}
 			}
-
-			// Deserialize the returned JSON.
-			// Example format of successful result:
-			/*
-			{
-				"status": "Succeeded",
-				"recognitionResult":
-				{
-					"lines":
-					[
-						{
-							"boundingBox": [84, 119, 280, 122, 279, 174, 83, 171],
-							"text": "HELLO",
-							"words":
-							[
-								{
-									"boundingBox": [97, 120, 273, 120, 271, 172, 95, 172],
-									"text": "HELLO"
-								}]
-						}
-					]
-				}
-			}
-			*/
+			#endregion
+			
 			var deserialized = JsonConvert.DeserializeObject<HandWritingRecognitionResult>(recognizedData);
 
 			return deserialized.CompleteText;
 		}
-
+		
 		public async Task<string> GetImageUrlAsync(string description)
 		{
 			// Quickstart: https://docs.microsoft.com/en-us/azure/cognitive-services/bing-image-search/quick-start
 
 			// Bing image search is using a different base URL.
+			#region REQUEST
 			var requestMessage = new HttpRequestMessage(HttpMethod.Get, 
 				$"https://api.cognitive.microsoft.com/bing/v7.0/images/search?q={HttpUtility.UrlEncode(description)}&license=share&safeSearch=strict");
 			requestMessage.Headers.Add("Ocp-Apim-Subscription-Key", BING_SEARCH_API_KEY);
 			var response = await _client.SendAsync(requestMessage).ConfigureAwait(false);
+			#endregion
+
+			#region PARSE
 			var resultJson = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-
-			// Example response:
-			//{
-			//	"_type":"Images",
-			//	"instrumentation":{},
-			//	"readLink":"https:\/\/api.cognitive.microsoft.com\/api\/v7\/images\/search?q=HALLO",
-			//	"webSearchUrl":"https:\/\/www.bing.com\/images\/search?q=HALLO&FORM=OIIARP",
-			//	"totalEstimatedMatches":879,
-			//	"nextOffset":38,
-			//	"value":[
-			//		{
-			//			"webSearchUrl":"https:\/\/www.bing.com\/images\/search?view=detailv2&FORM=OIIRPO&q=HALLO&id=12C4A2B0BDC20F6FE47062CDE8748E16BD00C7FE&simid=608016987088225815",
-			//			"name":"Hallo UV Licht - Design Nation",
-			//			"thumbnailUrl":"https:\/\/tse3.mm.bing.net\/th?id=OIP.plfFGnf0n4BO7jJlSeIffwHaLH&pid=Api",
-			//			"datePublished":"2011-10-11T03:59:00.0000000Z",
-			//			"contentUrl":"http:\/\/www.designnation.de\/Media\/Galerie\/4d6eb4545d7e9,Hallo-UV-Licht.jpg",
-			//			"hostPageUrl":"http:\/\/galerie.designnation.de\/bild\/52838",
-			//			"contentSize":"271464 B",
-			//			"encodingFormat":"jpeg",
-			//			"hostPageDisplayUrl":"galerie.designnation.de\/bild\/52838",
-			//			"width":1245,
-			//			"height":830,
-			//			"thumbnail":{
-			//				"width":474,
-			//				"height":711
-			//			},
-			//			"imageInsightsToken":"ccid_plfFGnf0*mid_12C4A2B0BDC20F6FE47062CDE8748E16BD00C7FE*simid_608016987088225815*thid_OIP.plfFGnf0n4BO7jJlSeIffwHaLH",
-			//			"insightsMetadata":{
-			//				"pagesIncludingCount":4,
-			//				"availableSizesCount":1
-			//			},
-			//			"imageId":"12C4A2B0BDC20F6FE47062CDE8748E16BD00C7FE",
-			//			"accentColor":"4A00CC"
-			//		},
-			//		[......]
-			//	]
-			//}
-			 
-
+			
 			var images = JsonConvert.DeserializeObject<BingImageSearchResult>(resultJson);
 			var imageData = images?.Value?.FirstOrDefault();
 			return imageData?.ContentUrl;
+			#endregion
 		}
 	}
 }
