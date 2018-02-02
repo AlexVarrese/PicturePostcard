@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+    <PackageReference Include="NUnit" Version="3.9.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.9.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PicturePostcard\PicturePostcard.Shared\PicturePostcard.Shared.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="testhandwriting.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="testhandwriting.jpg" />
+  </ItemGroup>
+</Project>

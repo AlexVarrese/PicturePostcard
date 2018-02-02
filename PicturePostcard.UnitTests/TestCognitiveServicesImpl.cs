@@ -19,7 +19,7 @@ namespace PicturePostCard.Tests
 		public async Task RecognizingHandWrittenText_ShouldSucceed()
 		{
 			var assembly = Assembly.GetExecutingAssembly();
-			var imageStream = assembly.GetManifestResourceStream("PicturePostCard.Tests.testhandwriting.jpg");
+			var imageStream = assembly.GetManifestResourceStream("PicturePostcard.UnitTests.testhandwriting.jpg");
 
 			var text = await _emotional.RecognizeHandwrittenTextAsync(imageStream);
 			imageStream.Dispose();
