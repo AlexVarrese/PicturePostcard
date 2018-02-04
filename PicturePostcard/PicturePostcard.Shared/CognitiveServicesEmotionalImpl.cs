@@ -16,9 +16,9 @@ namespace PicturePostcard.Shared
 	{
 		// Get a trial key at https://azure.microsoft.com/en-us/try/cognitive-services/
 		// or use youe Azure subscription to create a "Cognitive Services" resource.
-		const string COMPUTER_VISION_API_KEY = "32b240209d704902b4047bab61846c08";
-		const string TEXT_ANALYTICS_API_KEY = "d0b30a4079eb4584b085d1f695be48f3";
-		const string BING_SEARCH_API_KEY = "9204b829ac5646eeb6c603d3a318e3c7";
+		const string COMPUTER_VISION_API_KEY = "[YOUR COMPUTER VISION KEY GOES HERE]";
+		const string TEXT_ANALYTICS_API_KEY = "[YOUR TEXT ANALYTICS KEY GOES HERE]";
+		const string BING_SEARCH_API_KEY = "[YOUR BING SEARCH KEY GOES HERE]";
 
 		// Trial keys only work for the West Central US region (https://westcentralus.api.cognitive.microsoft.com/).
 		// This base URL works for most of the services. Bing Search uses a different one.
