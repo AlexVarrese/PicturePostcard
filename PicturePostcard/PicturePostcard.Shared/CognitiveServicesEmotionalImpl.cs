@@ -129,20 +129,25 @@ namespace PicturePostcard.Shared
 
 			// Send image data to the recognition service.
 			#region SENDIMAGE
-			using (var requestContent = new StreamContent(imageData))
-			{
-				requestContent.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
-				requestContent.Headers.Add("Ocp-Apim-Subscription-Key", COMPUTER_VISION_API_KEY);
+			var requestContent = new StreamContent(imageData);
+			requestContent.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+			requestContent.Headers.Add("Ocp-Apim-Subscription-Key", COMPUTER_VISION_API_KEY);
 
-				try
-				{
-					response = await _client.PostAsync("vision/v1.0/recognizeText?handwriting=true", requestContent).ConfigureAwait(false);
-				}
-				catch (Exception ex)
-				{
-					Debug.WriteLine($"Failed to post request. Error: {ex.Message}");
-					throw;
-				}
+			try
+			{
+				response = await _client.PostAsync("vision/v1.0/recognizeText?handwriting=true", requestContent).ConfigureAwait(false);
+				//var requestMessage = new HttpRequestMessage(HttpMethod.Post, "vision/v1.0/recognizeText?handwriting=true");
+				//requestMessage.Content = requestContent;
+				//response = await _client.SendAsync(requestMessage).ConfigureAwait(false);
+			}
+			catch (Exception ex)
+			{
+				Debug.WriteLine($"Failed to post request. Error: {ex.Message}");
+				throw;
+			}
+			finally
+			{
+				requestContent.Dispose();
 			}
 			#endregion
 

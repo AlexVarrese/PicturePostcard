@@ -26,4 +26,10 @@
       <DependentUpon>*.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
+  <ItemGroup>
+    <None Remove="testhandwriting.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="testhandwriting.jpg" />
+  </ItemGroup>
 </Project>

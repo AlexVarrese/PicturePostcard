@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using Xamarin.Forms;
+using System.Reflection;
 
 namespace PicturePostcard
 {
@@ -40,21 +41,13 @@ namespace PicturePostcard
 			// Make sure to set the fill color. The service cannot handle images with alpha transparency.
 			var imageStream = await _padView.GetImageStreamAsync(SignaturePad.Forms.SignatureImageFormat.Png, strokeColor: Color.Black, fillColor: Color.White);
 
-			// Commenting in this will save the file to disk before sending it into the cloud. Useful for debugging.
 			/*
-			Directory.CreateDirectory(App.UwpPath);
-			var p = Path.Combine(App.UwpPath, "image.png");
-			Debug.WriteLine(p);
-			using (var f = File.OpenWrite(p))
-			{
-				imageStream.CopyTo(f);
-			}
-			imageStream.Seek(0, SeekOrigin.Begin);
-			imageStream.Close();
-			imageStream = File.OpenRead(Path.Combine(App.UwpPath, "image.png"));
+			var assembly = Assembly.GetExecutingAssembly();
+			var imageStream = assembly.GetManifestResourceStream("PicturePostcard.Forms.testhandwriting.jpg");
 			*/
 
 			var message = await _emotional.RecognizeHandwrittenTextAsync(imageStream);
+			imageStream.Dispose();
 
 			if (string.IsNullOrWhiteSpace(message))
 			{
