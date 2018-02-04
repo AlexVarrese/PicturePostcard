@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27130.2010
+VisualStudioVersion = 15.0.27130.2024
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PicturePostcard.Android", "PicturePostcard\PicturePostcard.Android\PicturePostcard.Android.csproj", "{E979272C-B725-4B94-BE27-58DC3FDFBBDB}"
 EndProject
@@ -9,15 +9,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PicturePostcard.iOS", "Pict
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PicturePostcard.UWP", "PicturePostcard\PicturePostcard.UWP\PicturePostcard.UWP.csproj", "{88757998-8F93-476C-99B0-A11E9FD146B2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PicturePostcard.Forms", "PicturePostcard\PicturePostcard\PicturePostcard.Forms.csproj", "{5F3805D3-70E1-4BFD-AC02-ADAD2E1C4C2F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PicturePostcard.Forms", "PicturePostcard\PicturePostcard\PicturePostcard.Forms.csproj", "{5F3805D3-70E1-4BFD-AC02-ADAD2E1C4C2F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PicturePostcard.Shared", "PicturePostcard\PicturePostcard.Shared\PicturePostcard.Shared.csproj", "{156185C1-8BFA-4AAF-A955-646D561B542B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PicturePostcard.Shared", "PicturePostcard\PicturePostcard.Shared\PicturePostcard.Shared.csproj", "{156185C1-8BFA-4AAF-A955-646D561B542B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Forms", "Forms", "{5EBBFCE9-80E9-446D-AA33-E85153677FB8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PicturePostcard.UnitTests", "PicturePostcard.UnitTests\PicturePostcard.UnitTests.csproj", "{3D7A55DF-FE08-4561-B5C5-11A5921E2586}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HttpClientTest.iOS", "HttpClientTest.iOS\HttpClientTest.iOS.csproj", "{4A51D089-AE70-47AE-977D-16C4E8B6703A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PicturePostcard.UnitTests", "PicturePostcard.UnitTests\PicturePostcard.UnitTests.csproj", "{3D7A55DF-FE08-4561-B5C5-11A5921E2586}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -353,54 +351,6 @@ Global
 		{3D7A55DF-FE08-4561-B5C5-11A5921E2586}.Release|x64.Build.0 = Release|Any CPU
 		{3D7A55DF-FE08-4561-B5C5-11A5921E2586}.Release|x86.ActiveCfg = Release|Any CPU
 		{3D7A55DF-FE08-4561-B5C5-11A5921E2586}.Release|x86.Build.0 = Release|Any CPU
-		{4A51D089-AE70-47AE-977D-16C4E8B6703A}.Ad-Hoc|Any CPU.ActiveCfg = Release|iPhone
-		{4A51D089-AE70-47AE-977D-16C4E8B6703A}.Ad-Hoc|Any CPU.Build.0 = Release|iPhone
-		{4A51D089-AE70-47AE-977D-16C4E8B6703A}.Ad-Hoc|ARM.ActiveCfg = Release|iPhone
-		{4A51D089-AE70-47AE-977D-16C4E8B6703A}.Ad-Hoc|ARM.Build.0 = Release|iPhone
-		{4A51D089-AE70-47AE-977D-16C4E8B6703A}.Ad-Hoc|iPhone.ActiveCfg = Release|iPhone
-		{4A51D089-AE70-47AE-977D-16C4E8B6703A}.Ad-Hoc|iPhone.Build.0 = Release|iPhone
-		{4A51D089-AE70-47AE-977D-16C4E8B6703A}.Ad-Hoc|iPhoneSimulator.ActiveCfg = Release|iPhone
-		{4A51D089-AE70-47AE-977D-16C4E8B6703A}.Ad-Hoc|iPhoneSimulator.Build.0 = Release|iPhone
-		{4A51D089-AE70-47AE-977D-16C4E8B6703A}.Ad-Hoc|x64.ActiveCfg = Release|iPhone
-		{4A51D089-AE70-47AE-977D-16C4E8B6703A}.Ad-Hoc|x64.Build.0 = Release|iPhone
-		{4A51D089-AE70-47AE-977D-16C4E8B6703A}.Ad-Hoc|x86.ActiveCfg = Release|iPhone
-		{4A51D089-AE70-47AE-977D-16C4E8B6703A}.Ad-Hoc|x86.Build.0 = Release|iPhone
-		{4A51D089-AE70-47AE-977D-16C4E8B6703A}.AppStore|Any CPU.ActiveCfg = Release|iPhone
-		{4A51D089-AE70-47AE-977D-16C4E8B6703A}.AppStore|Any CPU.Build.0 = Release|iPhone
-		{4A51D089-AE70-47AE-977D-16C4E8B6703A}.AppStore|ARM.ActiveCfg = Release|iPhone
-		{4A51D089-AE70-47AE-977D-16C4E8B6703A}.AppStore|ARM.Build.0 = Release|iPhone
-		{4A51D089-AE70-47AE-977D-16C4E8B6703A}.AppStore|iPhone.ActiveCfg = Release|iPhone
-		{4A51D089-AE70-47AE-977D-16C4E8B6703A}.AppStore|iPhone.Build.0 = Release|iPhone
-		{4A51D089-AE70-47AE-977D-16C4E8B6703A}.AppStore|iPhoneSimulator.ActiveCfg = Release|iPhone
-		{4A51D089-AE70-47AE-977D-16C4E8B6703A}.AppStore|iPhoneSimulator.Build.0 = Release|iPhone
-		{4A51D089-AE70-47AE-977D-16C4E8B6703A}.AppStore|x64.ActiveCfg = Release|iPhone
-		{4A51D089-AE70-47AE-977D-16C4E8B6703A}.AppStore|x64.Build.0 = Release|iPhone
-		{4A51D089-AE70-47AE-977D-16C4E8B6703A}.AppStore|x86.ActiveCfg = Release|iPhone
-		{4A51D089-AE70-47AE-977D-16C4E8B6703A}.AppStore|x86.Build.0 = Release|iPhone
-		{4A51D089-AE70-47AE-977D-16C4E8B6703A}.Debug|Any CPU.ActiveCfg = Debug|iPhone
-		{4A51D089-AE70-47AE-977D-16C4E8B6703A}.Debug|Any CPU.Build.0 = Debug|iPhone
-		{4A51D089-AE70-47AE-977D-16C4E8B6703A}.Debug|ARM.ActiveCfg = Debug|iPhone
-		{4A51D089-AE70-47AE-977D-16C4E8B6703A}.Debug|ARM.Build.0 = Debug|iPhone
-		{4A51D089-AE70-47AE-977D-16C4E8B6703A}.Debug|iPhone.ActiveCfg = Debug|iPhone
-		{4A51D089-AE70-47AE-977D-16C4E8B6703A}.Debug|iPhone.Build.0 = Debug|iPhone
-		{4A51D089-AE70-47AE-977D-16C4E8B6703A}.Debug|iPhoneSimulator.ActiveCfg = Debug|iPhoneSimulator
-		{4A51D089-AE70-47AE-977D-16C4E8B6703A}.Debug|iPhoneSimulator.Build.0 = Debug|iPhoneSimulator
-		{4A51D089-AE70-47AE-977D-16C4E8B6703A}.Debug|x64.ActiveCfg = Debug|iPhone
-		{4A51D089-AE70-47AE-977D-16C4E8B6703A}.Debug|x64.Build.0 = Debug|iPhone
-		{4A51D089-AE70-47AE-977D-16C4E8B6703A}.Debug|x86.ActiveCfg = Debug|iPhone
-		{4A51D089-AE70-47AE-977D-16C4E8B6703A}.Debug|x86.Build.0 = Debug|iPhone
-		{4A51D089-AE70-47AE-977D-16C4E8B6703A}.Release|Any CPU.ActiveCfg = Release|iPhone
-		{4A51D089-AE70-47AE-977D-16C4E8B6703A}.Release|Any CPU.Build.0 = Release|iPhone
-		{4A51D089-AE70-47AE-977D-16C4E8B6703A}.Release|ARM.ActiveCfg = Release|iPhone
-		{4A51D089-AE70-47AE-977D-16C4E8B6703A}.Release|ARM.Build.0 = Release|iPhone
-		{4A51D089-AE70-47AE-977D-16C4E8B6703A}.Release|iPhone.ActiveCfg = Release|iPhone
-		{4A51D089-AE70-47AE-977D-16C4E8B6703A}.Release|iPhone.Build.0 = Release|iPhone
-		{4A51D089-AE70-47AE-977D-16C4E8B6703A}.Release|iPhoneSimulator.ActiveCfg = Release|iPhoneSimulator
-		{4A51D089-AE70-47AE-977D-16C4E8B6703A}.Release|iPhoneSimulator.Build.0 = Release|iPhoneSimulator
-		{4A51D089-AE70-47AE-977D-16C4E8B6703A}.Release|x64.ActiveCfg = Release|iPhone
-		{4A51D089-AE70-47AE-977D-16C4E8B6703A}.Release|x64.Build.0 = Release|iPhone
-		{4A51D089-AE70-47AE-977D-16C4E8B6703A}.Release|x86.ActiveCfg = Release|iPhone
-		{4A51D089-AE70-47AE-977D-16C4E8B6703A}.Release|x86.Build.0 = Release|iPhone
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
