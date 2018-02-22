@@ -1,7 +1,2 @@
-# ConferenceApp
-Demo used for cognitive services webinar
-
-Libraries used
-* https://github.com/NateRickard/Plugin.AudioRecorder
-* https://github.com/NateRickard/Xamarin.Cognitive.BingSpeech
-
+# Build Your First Intelligent App with Visual Studio, Xamarin, and Microsoft Cognitive Services
+*Xamarin University Presents:* Building Your First Intelligent App with Xamarin and Microsoft Cognitive Services. Learn how to use your existing .NET skills to create fully native Android, iOS, and UWP apps that tap into the power of Microsoft Cognitive Services’ intelligent APIs. You’ll walk through integrating Computer Vision, Sentiment Analysis, and Bing Search into an existing Xamarin.Forms project, hear René’s favorite tips and tricks, and leave inspired to bring “smart” to your apps.
